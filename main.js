@@ -12,17 +12,39 @@ const url = require('url')
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+let contents
+
 let $ = require('jquery');
 
+function analyze() {
+  let notification_window = new BrowserWindow(
+  {
+    width: 200,
+    height: 200,
+    frame: false,
+    x: 10,
+    y: 50,
+    alwaysOnTop: true
+  })
+  notification_window.on('close', function () { notification_window = null })
+  notification_window.loadURL(url.format({
+    pathname: path.join(__dirname, 'notification.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  notification_window.webContents.executeJavaScript("$('#html').html('sajan');")
+  notification_window.show()
+
+  setTimeout(function(){ notification_window.close() }, 10000);
+}
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
-  // and load the index.html of the app.
   mainWindow.loadURL("http://app.maropost.com/admin/servers")
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
@@ -57,6 +79,11 @@ function createWindow () {
       else mainWindow.close()
     })
   })
+
+  contents = mainWindow.webContents
+  contents.on('dom-ready', analyze)
+
+  setInterval(function(){ mainWindow.webContents.reload() }, 60000);
 }
 
 // This method will be called when Electron has finished
