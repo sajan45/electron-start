@@ -7,6 +7,7 @@ const dialog = electron.dialog
 
 const path = require('path')
 const url = require('url')
+const clipBoard = electron.clipboard
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -25,7 +26,8 @@ function analyze() {
     frame: false,
     x: 10,
     y: 50,
-    alwaysOnTop: true
+    alwaysOnTop: true,
+    backgroundColor: "#34495E"
   })
   notification_window.on('close', function () { notification_window = null })
   
@@ -36,17 +38,29 @@ function analyze() {
   }))
 
   contents.executeJavaScript('scrap()').then((result) => {
-    message = result[1].join('<br />')
+    message = result[1].join('\n')
     html = result[0]
     // notification_window.webContents.openDevTools()
-    notification_window.webContents.executeJavaScript("$('#html tbody').append('"+html+"');")
+    if(html || message){
+      notification_window.webContents.executeJavaScript("$('#html tbody').append('"+html+"');")
+      clipBoard.writeText(message)
+    }
   })
   setTimeout(function(){ notification_window.close() }, 15000);
 }
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, webPreferences: {preload: path.join(__dirname, 'manipulate.js')}})
+  mainWindow = new BrowserWindow(
+    {
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, 'manipulate.js')
+      },
+      show: false
+    }
+  )
 
   mainWindow.loadURL("http://app.maropost.com/admin/servers")
 
@@ -90,7 +104,7 @@ function createWindow () {
   contents = mainWindow.webContents
   contents.on('did-finish-load', analyze)
 
-  setInterval(function(){ mainWindow.webContents.reload() }, 60000);
+  setInterval(function(){ mainWindow.webContents.reload() }, 300000);
 }
 
 // This method will be called when Electron has finished
