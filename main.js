@@ -11,35 +11,42 @@ const url = require('url')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-
+let notification_window
 let contents
+let message = ""
 
 let $ = require('jquery');
 
 function analyze() {
-  let notification_window = new BrowserWindow(
+  notification_window = new BrowserWindow(
   {
-    width: 200,
-    height: 200,
+    width: 484,
+    height: 300,
     frame: false,
     x: 10,
     y: 50,
     alwaysOnTop: true
   })
   notification_window.on('close', function () { notification_window = null })
+  
   notification_window.loadURL(url.format({
     pathname: path.join(__dirname, 'notification.html'),
     protocol: 'file:',
     slashes: true
   }))
-  notification_window.webContents.executeJavaScript("$('#html').html('sajan');")
-  notification_window.show()
 
-  setTimeout(function(){ notification_window.close() }, 10000);
+  contents.executeJavaScript('scrap()').then((result) => {
+    message = result[1].join('<br />')
+    html = result[0]
+    // notification_window.webContents.openDevTools()
+    notification_window.webContents.executeJavaScript("$('#html tbody').append('"+html+"');")
+  })
+  setTimeout(function(){ notification_window.close() }, 15000);
 }
+
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600, webPreferences: {preload: path.join(__dirname, 'manipulate.js')}})
 
   mainWindow.loadURL("http://app.maropost.com/admin/servers")
 
@@ -81,7 +88,7 @@ function createWindow () {
   })
 
   contents = mainWindow.webContents
-  contents.on('dom-ready', analyze)
+  contents.on('did-finish-load', analyze)
 
   setInterval(function(){ mainWindow.webContents.reload() }, 60000);
 }
