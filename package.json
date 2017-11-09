@@ -4,7 +4,10 @@
   "description": "A app that scrap the servers page for warnings and errors in servers. Created by Sajan, for Maropost.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -14,10 +17,38 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "sajan",
   "license": "MIT",
+  "build": {
+    "appId": "com.maropost.app",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
+  },
   "devDependencies": {
-    "electron": "~1.7.8"
+    "electron": "~1.7.8",
+    "electron-builder": "^19.45.4"
   },
   "dependencies": {
     "jquery": "^3.2.1"

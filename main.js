@@ -61,8 +61,8 @@ function createWindow () {
       show: false
     }
   )
-
   mainWindow.loadURL("http://app.maropost.com/admin/servers")
+  mainWindow.showInactive()
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
