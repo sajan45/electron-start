@@ -3,11 +3,15 @@
   <head>
     <meta charset="UTF-8">
     <title>Server Alert</title>
+    <script src="./node_modules/howler/dist/howler.min.js"></script>
     <script>
       window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.min.js');
     </script>
     <style>
       @import "https://fonts.googleapis.com/css?family=Montserrat:300,400,700";
+      html {
+        height: 100%;
+      }
       .rwd-table {
         min-width: 300px;
       }
@@ -60,7 +64,8 @@
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
         color: #444;
-        background: #eee;
+        min-height: 100%;
+        background: #34495E;
       }
 
       h1 {
@@ -106,5 +111,12 @@
         <th>Memory Used %</th>
       </tr>
     </table>
+    <script>
+      require('./notification.js')
+      var sound = new Howl({
+        src: ['./notification.wav']
+      });
+      sound.play();
+    </script>
   </body>
 </html>

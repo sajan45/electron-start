@@ -1,14 +1,16 @@
 const electron = require('electron')
+
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 const dialog = electron.dialog
+const Menu = electron.Menu
 
 const path = require('path')
 const url = require('url')
 const clipBoard = electron.clipboard
-
+const settings = require('electron-settings');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -18,16 +20,75 @@ let message = ""
 
 let $ = require('jquery');
 
+const template = [
+  {
+    label: 'Settings',
+    submenu: [
+      {
+        label: 'Auto Copy',
+        submenu: [
+          {
+            label: "Deactivate",
+            accelerator: 'CmdOrCtrl+D',
+            enabled: (settings.get('auto_copy') !== false),
+            click: function (item, focusedWindow) {
+              settings.set('auto_copy', false)
+              menu.items[1].submenu.items[0].submenu.items[0].enabled = false
+              menu.items[1].submenu.items[0].submenu.items[1].enabled = true
+              dialog.showMessageBox({
+                type: 'info',
+                message: 'Success!',
+                detail: 'Auto Copy disabled.',
+                buttons: ['OK']
+              })
+            }
+          },
+          {
+            label: "Activate",
+            accelerator: 'CmdOrCtrl+E',
+            enabled: (settings.get('auto_copy') === false),
+            click: function () {
+              settings.set('auto_copy', true)
+              menu.items[1].submenu.items[0].submenu.items[1].enabled = false
+              menu.items[1].submenu.items[0].submenu.items[0].enabled = true
+              dialog.showMessageBox({
+                type: 'info',
+                message: 'Success!',
+                detail: 'Auto Copy Enabled.',
+                buttons: ['OK']
+              })
+            }
+          }
+        ]
+      }
+    ]
+  }]
+
+if (process.platform === 'darwin') {
+  template.unshift({
+    label: app.getName(),
+    submenu: [
+      {role: 'about'},
+      {type: 'separator'},
+      {role: 'hide'},
+      {role: 'unhide'},
+      {type: 'separator'},
+      {role: 'quit'}
+    ]
+  })
+}
+const menu = Menu.buildFromTemplate(template)
+
 function analyze() {
   notification_window = new BrowserWindow(
   {
-    width: 484,
+    width: 508,
     height: 300,
     frame: false,
     x: 10,
     y: 50,
     alwaysOnTop: true,
-    backgroundColor: "#34495E"
+    backgroundColor: "#34495E" // not working probably
   })
   notification_window.on('close', function () { notification_window = null })
   
@@ -43,13 +104,26 @@ function analyze() {
     // notification_window.webContents.openDevTools()
     if(html || message){
       notification_window.webContents.executeJavaScript("$('#html tbody').append('"+html+"');")
-      clipBoard.writeText(message)
+      if(settings.get('auto_copy') !== false){
+        clipBoard.writeText(message)
+      }
     }
   })
-  setTimeout(function(){ notification_window.close() }, 15000);
+
+  notification_window.on('closed', function () {
+    notification_window = null
+  })
+
+  setTimeout(function(){
+    if(notification_window){
+      notification_window.close()
+    }
+  }, 15000);
 }
 
 function createWindow () {
+  Menu.setApplicationMenu(menu)
+
   // Create the browser window.
   mainWindow = new BrowserWindow(
     {
