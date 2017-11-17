@@ -18,14 +18,16 @@ let notification_window
 let interval_setting
 let contents
 let message = ""
-
+let timeout
 let $ = require('jquery');
 
 function analyze() {
   // setting timeout for next reload
-  let interval = settings.get('interval') || 5
+  let interval = parseInt(settings.get('interval') || 5)
   let miliseconds = interval*60*1000
-  setTimeout(function(){ mainWindow.webContents.reload() }, miliseconds);
+
+  clearTimeout(timeout);
+  timeout = setTimeout(function(){ mainWindow.webContents.reload() }, miliseconds);
 
   notification_window = new BrowserWindow(
   {

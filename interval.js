@@ -4,11 +4,14 @@
   const settings = require('electron-settings')
   const window = remote.getCurrentWindow();
 
-  let interval = settings.get('interval') || 5
+  let interval = settings.get('interval')
+  
+  if(!interval){
+    settings.set('interval', 5)
+  }
 
   function init() {
 
-    document.querySelector("#time").value = interval
     document.querySelector("#save").addEventListener("click", function (e) {
       var new_interval = document.querySelector("#time").value
       settings.set('interval', new_interval)
@@ -16,7 +19,7 @@
     }); 
 
     document.querySelector("#cancel").addEventListener("click", function (e) {
-      document.querySelector("#time").value = interval
+      document.querySelector("#time").value = settings.get('interval')
       window.hide();
     });
   }; 
