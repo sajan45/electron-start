@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Interval Time</title>
+    <style>
+      body, html, .body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+      }
+      *:focus {
+        outline: none;
+      }
+      .body {
+        display: table;
+      }
+      .wrapper {
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
+      }
+      .info {
+        margin: 0.5em 0;
+        font-size: 1.25em;
+        color: #FFF;
+        text-shadow: 0 0 0.5em #000;
+      }
+      .input-name {
+        display: block;
+        margin: 1em auto;
+        padding: 0.5em 0.25em;
+        border: none;
+        border-radius: 0.2em;
+        font-size: 1.5em;
+        text-align: center;
+        box-shadow: 0 0 1em 0.25em rgba(0, 0, 0, 0.2);
+      }
+      .btn {
+        -webkit-border-radius: 4;
+        border-radius: 4px;
+        font-family: Arial;
+        color: #ffffff;
+        font-size: 17px;
+        background: green;
+        padding: 6px 15px 6px 15px;
+        text-decoration: none;
+      }
+      .btn-cancel {
+        background: #E75333;
+      }
+      .btn:hover {
+        background: #3cb0fd;
+        background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+        background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .btn-cancel:hover {
+        background: #FA2D01;
+      }
+    </style>
+    <script>
+      window.$ = window.jQuery = require('./node_modules/jquery/dist/jquery.min.js');
+    </script>
+  </head>
+  <body>
+    <div class="body">
+      <div class="wrapper">
+        <input class="input-name" id="time" placeholder="minutes" type='number'/>
+        <button type="button" class="btn" id="save">Save</button>
+        <button type="button" class="btn btn-cancel" id="cancel">Cancel</button>
+      </div>
+    </div>
+    <script>
+      require('./interval.js')
+    </script>
+  </body>
+</html>

@@ -4,7 +4,8 @@ window.onload = function() {
   window.$ = window.jQuery = require("jquery");
   messages = [];
   message = "";
-  nodes = ""
+  error_nodes = "";
+  warning_nodes = "";
   function scrap(){
     $("#tabs").remove();
     // workers memory usage and load
@@ -13,13 +14,16 @@ window.onload = function() {
       var name = $(server).children("td:eq(0)").html();
       var load = $(server).children("td:eq(2)")
       var mem_per = $(server).children("td:eq(3)")
+      var mem = parseInt($(mem_per).html())
+      if(mem >= 88){
+        $(mem_per).attr("class", "error")
+      }
       if(($(load).attr("class") == "warning" || $(load).attr("class") == "error") || ($(mem_per).attr("class") == "warning" || $(mem_per).attr("class") == "error")){
         message = name + " => "
         message += $(load).html() + "  "
         message += $(mem_per).html() + "  "
         messages.push(message)
-        node = createNode(name, "", $(load).html(), $(mem_per).html(), "", $(load).attr("class"), $(mem_per).attr("class"))
-        nodes += node
+        createNode(name, "", $(load).html(), $(mem_per).html(), "", $(load).attr("class"), $(mem_per).attr("class"))
       }
     })
     // Load on DB 1. should be less than 10
@@ -30,8 +34,7 @@ window.onload = function() {
       message = "DB1 load => "
       message += load + "  "
       messages.push(message)
-      node = createNode("DB1 load", "", load, "", "", load_class, "")
-      nodes += node
+      createNode("DB1 load", "", load, "", "", load_class, "")
     }
     // rest of the servers
     servers = $("table#servers tr").slice(1,86)
@@ -54,8 +57,7 @@ window.onload = function() {
         message += $(load).html() + "  "
         message += $(mem_per).html() + "  "
         messages.push(message)
-        node = createNode(name, "", $(load).html(), $(mem_per).html(), "", load_class, mem_class)
-        nodes += node
+        createNode(name, "", $(load).html(), $(mem_per).html(), "", load_class, mem_class)
       }
     })
     // Lag on any DB should be less than 100
@@ -68,11 +70,10 @@ window.onload = function() {
         message = name + " lag => "
         message += lag + "  "
         messages.push(message)
-        node = createNode(name, lag, "", "", lag_class, "", "")
-        nodes += node
+        createNode(name, lag, "", "", lag_class, "", "")
       }
     })
-    return [nodes,messages];
+    return [error_nodes,warning_nodes,messages];
   }
   function createNode(name, lag, load, memory, lag_class, load_class, mem_class){
     str = "<tr>"
@@ -95,6 +96,11 @@ window.onload = function() {
       str += "<td>"+memory+"</td>"
     }
     str += "</tr>"
+    if(lag_class == "error" || load_class == "error" || mem_class == "error"){
+      error_nodes += str
+    } else {
+      warning_nodes += str
+    }
     return str;
   }`
   document.body.appendChild(parser);
