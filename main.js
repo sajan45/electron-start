@@ -37,7 +37,8 @@ function analyze() {
     x: 10,
     y: 50,
     alwaysOnTop: true,
-    backgroundColor: "#34495E" // not working probably
+    backgroundColor: "#34495E", // not working probably
+    show: false
   })
   notification_window.on('close', function () { notification_window = null })
   
@@ -46,7 +47,7 @@ function analyze() {
     protocol: 'file:',
     slashes: true
   }))
-
+  notification_window.showInactive()
   contents.executeJavaScript('scrap()').then((result) => {
     message = result[2].join('\n')
     if(settings.get('alert_type') === 'errors_only'){

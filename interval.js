@@ -11,7 +11,7 @@
   }
 
   function init() {
-
+    document.querySelector("#time").value = settings.get('interval')
     document.querySelector("#save").addEventListener("click", function (e) {
       var new_interval = document.querySelector("#time").value
       settings.set('interval', new_interval)
