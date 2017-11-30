@@ -163,6 +163,24 @@ function createWindow () {
         }
       }
     ]
+  },{
+    label: 'Help',
+    submenu: [
+      {
+        label: 'Documentation',
+        click: function(){
+          let docWindow = new BrowserWindow({show: false, width: 690, height: 400})
+          docWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'doc.html'),
+            protocol: 'file:',
+            slashes: true
+          }))
+          docWindow.once('ready-to-show', () => {
+            docWindow.show()
+          })
+        }
+      }
+    ]
   }]
 
   if (process.platform === 'darwin') {
