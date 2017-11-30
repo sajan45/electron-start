@@ -265,6 +265,10 @@ function createWindow () {
     protocol: 'file:',
     slashes: true
   }))
+
+  interval_setting.on('closed', function () {
+    interval_setting.hide()
+  })
 }
 
 // This method will be called when Electron has finished
