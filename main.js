@@ -19,6 +19,7 @@ let interval_setting
 let contents
 let message = ""
 let timeout
+let willQuitApp = false;
 let $ = require('jquery');
 
 function analyze() {
@@ -164,6 +165,14 @@ function createWindow () {
       }
     ]
   },{
+      label: 'Window',
+      submenu: [
+      {
+        label: 'Reload',
+        role: 'reload',
+        accelerator: 'CmdOrCtrl+R'
+      }]
+  },{
     label: 'Help',
     submenu: [
       {
@@ -187,11 +196,6 @@ function createWindow () {
     template.unshift({
       label: app.getName(),
       submenu: [
-        {
-          label: 'Reload',
-          role: 'reload',
-          accelerator: 'CmdOrCtrl+R'
-        },
         {type: 'separator'},
         {role: 'about'},
         {type: 'separator'},
@@ -266,8 +270,15 @@ function createWindow () {
     slashes: true
   }))
 
-  interval_setting.on('closed', function () {
-    interval_setting.hide()
+  interval_setting.on('close', function () {
+    if (willQuitApp) {
+      /* the user tried to quit the app */
+      window = null;
+    } else {
+      /* the user only tried to close the window */
+      e.preventDefault();
+      interval_setting.hide();
+    }
   })
 }
 
@@ -292,6 +303,7 @@ app.on('activate', function () {
     createWindow()
   }
 })
+app.on('before-quit', () => willQuitApp = true);
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
