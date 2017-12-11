@@ -44,6 +44,8 @@ window.onload = function() {
       var mem_per = $(server).children("td:eq(3)")
       var load_class = $(load).attr("class")
       var mem_class = $(mem_per).attr("class")
+      lag = parseFloat($(server).children(":eq(1)").html())
+      lag_class = $(server).children(":eq(1)").attr("class")
       // DB servers RAM usage is normally high so ignoring it
       if(name.match(/db|ftp|sms/i)){
         mem_class = ""
@@ -59,13 +61,6 @@ window.onload = function() {
         messages.push(message)
         createNode(name, "", $(load).html(), $(mem_per).html(), "", load_class, mem_class)
       }
-    })
-    // Lag on any DB should be less than 100
-    all_db = $("table#servers tr").slice(30,57)
-    $.each(all_db, function(_i, server){
-      var name = $(server).children("td:eq(0)").html();
-      lag = parseFloat($(server).children(":eq(1)").html())
-      lag_class = $(server).children(":eq(1)").attr("class")
       if(lag > 100.0){
         message = name + " lag => "
         message += lag + "  "
@@ -73,6 +68,7 @@ window.onload = function() {
         createNode(name, lag, "", "", lag_class, "", "")
       }
     })
+    
     return [error_nodes,warning_nodes,messages];
   }
   function createNode(name, lag, load, memory, lag_class, load_class, mem_class){
