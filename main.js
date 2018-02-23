@@ -41,13 +41,16 @@ function analyze() {
     backgroundColor: "#34495E", // not working probably
     show: false
   })
-  notification_window.on('close', function () { notification_window = null })
   
   notification_window.loadURL(url.format({
     pathname: path.join(__dirname, 'notification.html'),
     protocol: 'file:',
     slashes: true
   }))
+  notification_window.on('closed', function () {
+    notification_window = null
+  })
+
   notification_window.showInactive()
   contents.executeJavaScript('scrap()').then((result) => {
     message = result[2].join('\n')
@@ -63,12 +66,8 @@ function analyze() {
         clipBoard.writeText(message)
       }
     }
-  })
 
-  notification_window.on('closed', function () {
-    notification_window = null
   })
-
   setTimeout(function(){
     if(notification_window){
       notification_window.close()
@@ -215,12 +214,13 @@ function createWindow () {
       width: 800,
       height: 600,
       webPreferences: {
-        preload: path.join(__dirname, 'manipulate.js')
+        preload: path.join(__dirname, 'manipulate.js'),
+        nodeIntegration: false
       },
       show: false
     }
   )
-  mainWindow.loadURL("http://app.maropost.com/admin/servers")
+  mainWindow.loadURL("http://processlist.io/")
   mainWindow.showInactive()
 
   // Open the DevTools.
@@ -261,7 +261,7 @@ function createWindow () {
   })
 
   contents = mainWindow.webContents
-  contents.on('did-finish-load', analyze)
+  contents.on('dom-ready', analyze)
 
   interval_setting = new BrowserWindow({parent: mainWindow, modal: true, show: false, width: 404, height: 229})
   interval_setting.loadURL(url.format({
