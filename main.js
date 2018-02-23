@@ -52,27 +52,13 @@ function analyze() {
   })
 
   notification_window.showInactive()
-  contents.executeJavaScript('scrap()').then((result) => {
-    message = result[2].join('\n')
-    if(settings.get('alert_type') === 'errors_only'){
-      html = result[0]
-    } else {
-      html = result[0] + result[1]
-    }
-    // notification_window.webContents.openDevTools()
-    if(html || message){
-      notification_window.webContents.executeJavaScript("$('#html tbody').append('"+html+"');")
-      if(settings.get('auto_copy') !== false){
-        clipBoard.writeText(message)
-      }
-    }
+  // contents.executeJavaScript('scrap()').then((result) => {
+  // notification_window.webContents.openDevTools()
+  // })
+}
 
-  })
-  setTimeout(function(){
-    if(notification_window){
-      notification_window.close()
-    }
-  }, 15000);
+function wait_before_analyze(){
+  setTimeout(analyze, 2000)
 }
 
 function createWindow () {
@@ -261,7 +247,7 @@ function createWindow () {
   })
 
   contents = mainWindow.webContents
-  contents.on('dom-ready', analyze)
+  contents.on('dom-ready', wait_before_analyze)
 
   interval_setting = new BrowserWindow({parent: mainWindow, modal: true, show: false, width: 404, height: 229})
   interval_setting.loadURL(url.format({

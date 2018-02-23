@@ -100,16 +100,24 @@
       .error, .text-danger {
         color: red;
       }
+      ::selection {
+        background:rgba(255, 255, 125, 0.99)
+        color:#032764;
+      }
     </style>
   </head>
   <body>
     <table class="rwd-table" id="html">
-      <tr>
-        <th>Name</th>
-        <th>DB Lag</th>
-        <th>Load</th>
-        <th>Memory Used %</th>
-      </tr>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>DB Lag</th>
+          <th>Load</th>
+          <th>Memory Used %</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
     </table>
     <script>
       require('./notification.js')

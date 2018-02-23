@@ -32,7 +32,7 @@ window.onload = function() {
       var load_elem = $(stats.children(":eq(1)"));
       var mem_elem = $(stats.children(":eq(3)"));
 
-      var lag = parseFloat(lag_elem.children(":eq(1)").text());
+      var lag = parseFloat(lag_elem.clone().children().remove().end().text());
       var load = parseFloat(load_elem.children(":eq(1)").text());
       var mem_per = mem_elem.children(":eq(1)").text();
 
