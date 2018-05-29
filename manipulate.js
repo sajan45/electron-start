@@ -25,7 +25,7 @@ window.onload = function() {
     // all servers
     $.each(servers, function(_i, server){
       server_data = $(server).find('.list-group-item-text').find('.row')
-      var name = $(server_data[0]).children(":eq(0)").text().trim().split('-')[1].split('.')[0];
+      var name = $(server_data[0]).children(":eq(0)").text().trim().replace('.maropost.com','').replace(/\\d{6}-/,'');
       var stats = $(server_data[1]);
 
       var lag_elem = $(stats.children(":eq(0)"));
