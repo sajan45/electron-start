@@ -1,5 +1,6 @@
 const electron = require('electron')
 const { autoUpdater } = require("electron-updater")
+const log = require('electron-log');
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -21,6 +22,9 @@ let message = ""
 let timeout
 let willQuitApp = false;
 let $ = require('jquery');
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
 
 function analyze() {
   // setting timeout for next reload
@@ -296,6 +300,28 @@ app.on('activate', function () {
   }
 })
 app.on('before-quit', () => willQuitApp = true);
+
+autoUpdater.on('checking-for-update', () => {
+  log.info('Checking for update...');
+})
+autoUpdater.on('update-available', (info) => {
+  log.info('Update available.');
+})
+autoUpdater.on('update-not-available', (info) => {
+  log.info('Update not available.');
+})
+autoUpdater.on('error', (err) => {
+  log.info('Error in auto-updater. ' + err);
+})
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  log.info(log_message);
+})
+autoUpdater.on('update-downloaded', (info) => {
+  log.info('Update downloaded');
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

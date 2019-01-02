@@ -1,6 +1,6 @@
 {
   "name": "MaroMonitor",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "A app that scrap the servers page for warnings and errors in servers. Created by Sajan, for Maropost.",
   "main": "main.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "electron-builder": "^20.38.4"
   },
   "dependencies": {
+    "electron-log": "^2.2.17",
     "electron-settings": "^3.1.4",
     "electron-updater": "^4.0.6",
     "howler": "^2.0.5",
