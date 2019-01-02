@@ -72,7 +72,7 @@ window.onload = function() {
         message = name + " lag => "
         message += lag + "  "
         messages.errors.push(message)
-        createNode(name, lag, "", "", "text-danger", "", "")
+        createNode(name, lag, "", "", "", "text-danger", "", "", "")
       }
     })
     
