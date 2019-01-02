@@ -28,7 +28,13 @@ function analyze() {
   let miliseconds = interval*60*1000
 
   clearTimeout(timeout);
-  timeout = setTimeout(function(){ mainWindow.webContents.reload() }, miliseconds);
+  timeout = setTimeout(function(){
+    if(mainWindow){
+      mainWindow.webContents.reload()
+    } else {
+      createWindow()
+    }
+  }, miliseconds);
 
   notification_window = new BrowserWindow(
   {
@@ -61,7 +67,7 @@ function wait_before_analyze(){
   setTimeout(analyze, 2000)
 }
 
-function createWindow () {
+function createWindow() {
 
   const template = [
   {

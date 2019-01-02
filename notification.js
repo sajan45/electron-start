@@ -19,11 +19,19 @@
     }, 15000);
 
     contents.executeJavaScript('scrap()').then((result) => {
-      message = result[2].join('\n')
       if(settings.get('alert_type') === 'errors_only'){
-        html = result[0]
+        if(result[0].length > 0){
+          html = result[0]
+        } else {
+          // shows warnings if only errors alert is selected but there is no
+          // error alert, to avoid confusion due to blank notification window
+          html = result[1]
+        }
+        message = result[2].errors.join('\n')
       } else {
         html = result[0] + result[1]
+        message = result[2].errors.join('\n') + '\n'
+        message += result[2].warnings.join('\n')
       }
       if(html || message){
         document.querySelector("#html tbody").innerHTML = html;

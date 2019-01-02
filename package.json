@@ -1,6 +1,6 @@
 {
   "name": "MaroMonitor",
-  "version": "1.6.1",
+  "version": "1.6.4",
   "description": "A app that scrap the servers page for warnings and errors in servers. Created by Sajan, for Maropost.",
   "main": "main.js",
   "scripts": {
