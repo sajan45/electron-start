@@ -1,15 +1,16 @@
 {
   "name": "MaroMonitor",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "A app that scrap the servers page for warnings and errors in servers. Created by Sajan, for Maropost.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "publish": "build -p always"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/sajan45/maro_monitor",
   "keywords": [
     "Electron",
     "quick",
@@ -21,29 +22,12 @@
   "license": "MIT",
   "build": {
     "appId": "com.maropost.app",
-    "dmg": {
-      "contents": [
-        {
-          "x": 110,
-          "y": 150
-        },
-        {
-          "x": 240,
-          "y": 150,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "linux": {
+    "mac": {
+      "category": "your.app.category.type",
       "target": [
-        "AppImage",
-        "deb"
+        "zip",
+        "dmg"
       ]
-    },
-    "win": {
-      "target": "NSIS",
-      "icon": "build/icon.ico"
     }
   },
   "devDependencies": {
@@ -52,6 +36,7 @@
   },
   "dependencies": {
     "electron-settings": "^3.1.4",
+    "electron-updater": "^4.0.6",
     "howler": "^2.0.5",
     "jquery": "^3.2.1"
   }

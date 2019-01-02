@@ -1,5 +1,5 @@
 const electron = require('electron')
-
+const { autoUpdater } = require("electron-updater")
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -68,7 +68,7 @@ function wait_before_analyze(){
 }
 
 function createWindow() {
-
+  autoUpdater.checkForUpdatesAndNotify()
   const template = [
   {
     label: 'Settings',
