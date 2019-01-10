@@ -35,7 +35,7 @@ window.onload = function() {
       }
 
       // DB servers RAM usage is normally high so ignoring it
-      if(name.match(/db|ftp|sms|fields|tables|clicks|sends|contacts|opens|cloud2|mysql/i)){
+      if(name.match(/-db|ftp|sms|fields|tables|clicks|sends|contacts|opens|cloud2|mysql/i)){
         mem_class = ""
       }
 
